@@ -18,6 +18,7 @@ export function useForceTouch(maxGrams: number): UseForceTouchReturn {
   const resetTimeoutRef = useRef<number | null>(null);
   const forceRafRef = useRef<number | null>(null);
   const touchStateRafRef = useRef<number | null>(null);
+  const measurementActiveRef = useRef(false);
 
   const clearResetTimeout = useCallback(() => {
     if (resetTimeoutRef.current !== null && typeof window !== "undefined") {
@@ -56,8 +57,21 @@ export function useForceTouch(maxGrams: number): UseForceTouchReturn {
     });
   }, []);
 
+  const isMeasurementTarget = useCallback((target: EventTarget | null) => {
+    if (!(target instanceof Element)) {
+      return false;
+    }
+
+    return target.closest('[data-force-zone="measure"]') !== null;
+  }, []);
+
   const handleForceChange = useCallback(
     (event: TouchEvent) => {
+      if (!measurementActiveRef.current && !isMeasurementTarget(event.target)) {
+        return;
+      }
+
+      measurementActiveRef.current = true;
       event.preventDefault();
 
       const touch = event.changedTouches.item(0);
@@ -75,24 +89,41 @@ export function useForceTouch(maxGrams: number): UseForceTouchReturn {
 
       scheduleRawGrams(clampedGrams);
     },
-    [clearResetTimeout, maxGrams, scheduleRawGrams]
+    [clearResetTimeout, isMeasurementTarget, maxGrams, scheduleRawGrams]
   );
 
   const handleTouchStart = useCallback(
     (event: TouchEvent) => {
+      if (!isMeasurementTarget(event.target)) {
+        return;
+      }
+
+      measurementActiveRef.current = true;
       event.preventDefault();
       clearResetTimeout();
       scheduleTouchState(true);
     },
-    [clearResetTimeout, scheduleTouchState]
+    [clearResetTimeout, isMeasurementTarget, scheduleTouchState]
   );
 
-  const handleTouchMove = useCallback((event: TouchEvent) => {
-    event.preventDefault();
-  }, []);
+  const handleTouchMove = useCallback(
+    (event: TouchEvent) => {
+      if (!measurementActiveRef.current && !isMeasurementTarget(event.target)) {
+        return;
+      }
+
+      event.preventDefault();
+    },
+    [isMeasurementTarget]
+  );
 
   const handleTouchEnd = useCallback(
     (event: TouchEvent) => {
+      if (!measurementActiveRef.current) {
+        return;
+      }
+
+      measurementActiveRef.current = false;
       event.preventDefault();
       clearResetTimeout();
       scheduleTouchState(false);
@@ -175,6 +206,7 @@ export function useForceTouch(maxGrams: number): UseForceTouchReturn {
       );
 
       clearResetTimeout();
+      measurementActiveRef.current = false;
 
       if (forceRafRef.current !== null) {
         window.cancelAnimationFrame(forceRafRef.current);

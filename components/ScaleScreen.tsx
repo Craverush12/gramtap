@@ -217,6 +217,7 @@ export default function ScaleScreen() {
 
         <button
           type="button"
+          data-force-zone="measure"
           onPointerDown={handleDisplayPointerDown}
           onPointerUp={handleDisplayPointerUp}
           onPointerCancel={handleDisplayPointerCancel}

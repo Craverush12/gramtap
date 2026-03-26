@@ -13,7 +13,7 @@ const steps = [
   "Put a metal spoon or large coin flat on the screen as a conductor",
   "Tap TARE to zero out the spoon weight",
   "Place your object on top of the spoon",
-  "Wait for “Stabilized ✓” before reading the weight"
+  'Wait for "Stabilized ✓" before reading the weight'
 ];
 
 function CloseIcon() {
@@ -51,14 +51,16 @@ export default function InstructionsModal({
             className="absolute inset-0 cursor-default"
             onClick={onClose}
           />
+
           <motion.div
-            className="relative z-10 w-full rounded-t-[2rem] border-t border-white/10 bg-[#101010] px-5 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-5 shadow-2xl shadow-black/40"
+            className="relative z-10 flex max-h-[calc(100dvh-0.75rem)] w-full flex-col overflow-hidden rounded-t-[2rem] border-t border-white/10 bg-[#101010] px-5 pt-5 shadow-2xl shadow-black/40"
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
           >
             <div className="mx-auto mb-4 h-1.5 w-16 rounded-full bg-white/15" />
+
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs uppercase tracking-[0.35em] text-accent">
@@ -68,40 +70,45 @@ export default function InstructionsModal({
                   Turn your iPhone into a digital scale
                 </h2>
                 <p className="mt-2 max-w-xl text-sm leading-6 text-muted">
-                  Turn your iPhone into a digital scale — instantly, in your browser.
+                  Turn your iPhone into a digital scale - instantly, in your browser.
                 </p>
               </div>
+
               <button
                 type="button"
                 aria-label="Dismiss instructions"
                 onClick={onClose}
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white transition hover:bg-white/10"
               >
                 <CloseIcon />
               </button>
             </div>
 
-            <div className="mt-6 grid gap-3">
-              {steps.map((step, index) => (
-                <div
-                  key={step}
-                  className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
-                >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
-                    {index + 1}
+            <div className="mt-6 flex-1 overflow-y-auto overscroll-contain pr-1">
+              <div className="grid gap-3 pb-5">
+                {steps.map((step, index) => (
+                  <div
+                    key={step}
+                    className="flex items-start gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-4"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent/15 text-sm font-semibold text-accent">
+                      {index + 1}
+                    </div>
+                    <p className="pt-1 text-sm leading-6 text-white/90">{step}</p>
                   </div>
-                  <p className="pt-1 text-sm leading-6 text-white/90">{step}</p>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            <button
-              type="button"
-              onClick={onAcknowledge}
-              className="mt-6 w-full rounded-2xl bg-accent px-5 py-4 text-sm font-semibold uppercase tracking-[0.28em] text-white shadow-lg shadow-accent/20 transition hover:bg-blue-400"
-            >
-              Got it
-            </button>
+            <div className="border-t border-white/10 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] pt-4">
+              <button
+                type="button"
+                onClick={onAcknowledge}
+                className="w-full rounded-2xl bg-accent px-5 py-4 text-sm font-semibold uppercase tracking-[0.28em] text-white shadow-lg shadow-accent/20 transition hover:bg-blue-400"
+              >
+                Got it
+              </button>
+            </div>
           </motion.div>
         </motion.div>
       ) : null}
