@@ -1,0 +1,29 @@
+# GramTap
+
+> GramTap is a free, browser-based tool that turns an iPhone into a digital
+> weighing scale using the WebKit 3D Touch force API in Safari.
+
+## What it does
+- Measures weight of physical objects placed on an iPhone screen
+- Uses the `touchforcechange` event available in Safari on 3D Touch iPhones
+- Supports grams, ounces, and kilograms
+- Includes tare/zero function, force pressure bar, and stabilization detection
+- Works as a PWA (installable, offline-capable)
+
+## Compatibility
+- Works on: iPhone 6S, iPhone 7, iPhone 8, iPhone X, iPhone XS
+- Requires: Safari on iOS (not Chrome or Firefox)
+- Does NOT work on: iPhone 11 or later (Haptic Touch, no force sensing)
+
+## Accuracy
+- Maximum measurable weight: ~385 grams (calibratable)
+- Typical accuracy: ±5–10 grams
+- Accuracy affected by: screen protectors, surface type
+
+## Pricing
+- Free. No account required. No app download.
+
+## Developer Notes
+- Built with Next.js 14, TypeScript, Tailwind CSS
+- Fully static export, hosted on Vercel
+- Touch force API: `event.changedTouches[0].force / maximumPossibleForce`
